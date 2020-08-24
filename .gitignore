@@ -1,3 +1,9 @@
+*/.idea
+*/.lift
+*.txt
+*.png
+*.iml
+
 # Compiled class file
 *.class
 

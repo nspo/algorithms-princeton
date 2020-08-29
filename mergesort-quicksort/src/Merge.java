@@ -20,6 +20,7 @@ public class Merge {
         assert isSorted(a, lo, mid);
         assert isSorted(a, mid + 1, hi);
 
+        // could avoid this copy by switching role of a and aux on each step in sort function
         for (int k = lo; k <= hi; ++k) {
             aux[k] = a[k];
         }
@@ -45,25 +46,49 @@ public class Merge {
         System.out.print("\n");
     }
 
-    private static <T extends Comparable<T>> void sort(T[] a, T[] aux, int lo, int hi) {
+    private static <T extends Comparable<T>> void sortRecursive(T[] a, T[] aux, int lo, int hi) {
         if (hi <= lo) return;
+
+        // possibly use other sorting algorithm for small (e.g. <= 7) arrays
+
         int mid = lo + (hi - lo) / 2;
-        sort(a, aux, lo, mid);
-        sort(a, aux, mid + 1, hi);
+        sortRecursive(a, aux, lo, mid);
+        sortRecursive(a, aux, mid + 1, hi);
+        if (!less(a[mid + 1], a[mid])) return; // already sorted
         merge(a, aux, lo, mid, hi);
     }
 
 
-    public static <T extends Comparable<T>> void sort(T[] a) {
+    public static <T extends Comparable<T>> void sortRecursive(T[] a) {
+        // recursive version
         @SuppressWarnings("unchecked")
         T[] aux = (T[]) new Comparable[a.length];
-        sort(a, aux, 0, a.length - 1);
+        sortRecursive(a, aux, 0, a.length - 1);
+    }
+
+    public static <T extends Comparable<T>> void sort(T[] a) {
+        // non-recursive version
+        int N = a.length;
+        @SuppressWarnings("unchecked")
+        T[] aux = (T[]) new Comparable[N];
+        for (int size = 1; size < N; size = size * 2) {
+            for (int lo = 0; lo < N - size; lo += 2 * size) {
+                merge(a, aux, lo, lo + size - 1, Math.min(N - 1, lo + 2 * size - 1));
+            }
+        }
     }
 
     public static void main(String[] args) {
+        System.out.println("Recursive Mergesort");
         Integer[] a = {0, 1, 7, 8, 4, 3, 2, 1, 8, 5, 6, 0};
         print_arr(a, 0, a.length - 1);
-        sort(a);
+        sortRecursive(a);
         print_arr(a, 0, a.length - 1);
+
+        System.out.println("Non-recursive Mergesort");
+        Integer[] b = {0, 1, 7, 8, 4, 3, 2, 1, 8, 5, 6, 0};
+        print_arr(b, 0, b.length - 1);
+        sort(b);
+        print_arr(b, 0, b.length - 1);
     }
 }

@@ -2,4 +2,4 @@ Code related to the Algorithms course by Princeton University (Robert Sedgewick,
 
 Mostly Java, some C++
 
-See https://www.coursera.org/learn/algorithms-part1/home/info
+See https://www.coursera.org/learn/algorithms-part1/home/info and https://www.coursera.org/learn/algorithms-part2/home/info
